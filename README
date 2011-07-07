@@ -1,0 +1,32 @@
+# Jython For Android
+
+This is a fork of the projects at:
+  * http://code.google.com/p/jython-for-android/
+  * http://code.google.com/p/jythonroid/
+
+# Developing
+  * The primary use case is to run a (J|P)ython app from within an Android App.
+  * The Android App will usually just be org.jython_on_android.JythonOnAndroidRunScript.
+  * Specify the name of the python file in a bit of metadata in AndroidManifest.xml
+  * Build the app
+  * Install it
+  * Run it
+  * Check the log (adb -e logcat) to see if you have errors
+
+
+# Building
+  * Requirements:
+    * Java (in your path)
+    * Apache Ant (in your path)
+    * Android SDK
+
+  * Update local.properties
+  * run 'ant debug' or 'ant release'
+
+# Installing
+  * On an emulator: adb -e install bin/YourApp-debug.apk
+  * run 'ant debug' or 'ant release'
+
+# Example Code
+  * See src/example/app/hello_world.python
+
