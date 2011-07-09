@@ -24,8 +24,8 @@ class PythonTraceFunction extends TraceFunction {
                     ret = tracefunc.__call__(frame, new PyString(label), arg);
                 } catch(PyException exc) {
                     frame.tracefunc = null;
-                    ts.systemState.tracefunc = null;
-                    ts.systemState.profilefunc = null;
+                    ts.tracefunc = null;
+                    ts.profilefunc = null;
                     throw exc;
                 } finally {
                     ts.tracing = false;
@@ -52,10 +52,9 @@ class PythonTraceFunction extends TraceFunction {
     }
 
     public TraceFunction traceException(PyFrame frame, PyException exc) {
-        return safeCall(frame,
-                        "exception",
-                        new PyTuple(new PyObject[] {exc.type,
-                                                    exc.value,
-                                                    exc.traceback}));
+        // We must avoid passing a null to a PyTuple
+        PyObject safeTraceback = exc.traceback == null ? Py.None : exc.traceback;
+        return safeCall(frame, "exception",
+                new PyTuple(exc.type, exc.value, safeTraceback));
     }
 }

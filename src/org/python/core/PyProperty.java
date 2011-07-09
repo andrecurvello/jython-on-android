@@ -1,207 +1,163 @@
+/* Copyright (c) Jython Developers */
 package org.python.core;
 
-public class PyProperty extends PyObject implements PyType.Newstyle {
-    //~ BEGIN GENERATED REGION -- DO NOT EDIT SEE gexpose.py
-    /* type info */
+import org.python.expose.ExposedGet;
+import org.python.expose.ExposedMethod;
+import org.python.expose.ExposedNew;
+import org.python.expose.ExposedType;
 
-    public static final String exposed_name="property";
+@ExposedType(name = "property", doc = BuiltinDocs.property_doc)
+public class PyProperty extends PyObject {
 
-    public static void typeSetup(PyObject dict,PyType.Newstyle marker) {
-        dict.__setitem__("fget",new PyGetSetDescr("fget",PyProperty.class,"getFget","setFget",null));
-        dict.__setitem__("fset",new PyGetSetDescr("fset",PyProperty.class,"getFset","setFset",null));
-        dict.__setitem__("fdel",new PyGetSetDescr("fdel",PyProperty.class,"getFdel","setFdel",null));
-        dict.__setitem__("__doc__",new PyGetSetDescr("__doc__",PyProperty.class,"getDoc","setDoc",null));
-        class exposed___get__ extends PyBuiltinMethodNarrow {
+    public static final PyType TYPE = PyType.fromClass(PyProperty.class);
 
-            exposed___get__(PyObject self,PyBuiltinFunction.Info info) {
-                super(self,info);
-            }
-
-            public PyBuiltinFunction bind(PyObject self) {
-                return new exposed___get__(self,info);
-            }
-
-            public PyObject __call__(PyObject arg0,PyObject arg1) {
-                PyObject obj=(arg0==Py.None)?null:arg0;
-                PyObject type=(arg1==null)?obj:arg1;
-                return((PyProperty)self).property___get__(obj,type);
-            }
-
-            public PyObject __call__(PyObject arg0) {
-                PyObject obj=(arg0==Py.None)?null:arg0;
-                PyObject type=((null)==null)?obj:(null);
-                return((PyProperty)self).property___get__(obj,type);
-            }
-
-        }
-        dict.__setitem__("__get__",new PyMethodDescr("__get__",PyProperty.class,1,2,new exposed___get__(null,null)));
-        class exposed___set__ extends PyBuiltinMethodNarrow {
-
-            exposed___set__(PyObject self,PyBuiltinFunction.Info info) {
-                super(self,info);
-            }
-
-            public PyBuiltinFunction bind(PyObject self) {
-                return new exposed___set__(self,info);
-            }
-
-            public PyObject __call__(PyObject arg0,PyObject arg1) {
-                ((PyProperty)self).property___set__(arg0,arg1);
-                return Py.None;
-            }
-
-        }
-        dict.__setitem__("__set__",new PyMethodDescr("__set__",PyProperty.class,2,2,new exposed___set__(null,null)));
-        class exposed___delete__ extends PyBuiltinMethodNarrow {
-
-            exposed___delete__(PyObject self,PyBuiltinFunction.Info info) {
-                super(self,info);
-            }
-
-            public PyBuiltinFunction bind(PyObject self) {
-                return new exposed___delete__(self,info);
-            }
-
-            public PyObject __call__(PyObject arg0) {
-                ((PyProperty)self).property___delete__(arg0);
-                return Py.None;
-            }
-
-        }
-        dict.__setitem__("__delete__",new PyMethodDescr("__delete__",PyProperty.class,1,1,new exposed___delete__(null,null)));
-        class exposed___init__ extends PyBuiltinMethod {
-
-            exposed___init__(PyObject self,PyBuiltinFunction.Info info) {
-                super(self,info);
-            }
-
-            public PyBuiltinFunction bind(PyObject self) {
-                return new exposed___init__(self,info);
-            }
-
-            public PyObject __call__(PyObject[]args) {
-                return __call__(args,Py.NoKeywords);
-            }
-
-            public PyObject __call__(PyObject[]args,String[]keywords) {
-                ((PyProperty)self).property_init(args,keywords);
-                return Py.None;
-            }
-
-        }
-        dict.__setitem__("__init__",new PyMethodDescr("__init__",PyProperty.class,-1,-1,new exposed___init__(null,null)));
-        dict.__setitem__("__new__",new PyNewWrapper(PyProperty.class,"__new__",-1,-1) {
-
-                                                                                          public PyObject new_impl(boolean init,PyType subtype,PyObject[]args,String[]keywords) {
-                                                                                              PyProperty newobj;
-                                                                                              if (for_type==subtype) {
-                                                                                                  newobj=new PyProperty();
-                                                                                                  if (init)
-                                                                                                      newobj.property_init(args,keywords);
-                                                                                              } else {
-                                                                                                  newobj=new PyPropertyDerived(subtype);
-                                                                                              }
-                                                                                              return newobj;
-                                                                                          }
-
-                                                                                      });
-    }
-    //~ END GENERATED REGION -- DO NOT EDIT SEE gexpose.py
-
-    private static final PyType PROPERTYTYPE = PyType.fromClass(PyProperty.class);
-
+    @ExposedGet(doc = BuiltinDocs.property_fget_doc)
     protected PyObject fget;
+
+    @ExposedGet(doc = BuiltinDocs.property_fset_doc)
     protected PyObject fset;
+
+    @ExposedGet(doc = BuiltinDocs.property_fdel_doc)
     protected PyObject fdel;
+
+    /** Whether this property's __doc__ was copied from its getter. */
+    protected boolean docFromGetter;
+
+    @ExposedGet(name = "__doc__")
     protected PyObject doc;
 
     public PyProperty() {
-        this(PROPERTYTYPE);
+        this(TYPE);
     }
 
     public PyProperty(PyType subType) {
         super(subType);
     }
 
-    public PyObject getDoc() {
-        return doc;
-    }
-    public PyObject getFdel() {
-        return fdel;
-    }
-    public PyObject getFset() {
-        return fset;
+    @ExposedNew
+    @ExposedMethod(doc = BuiltinDocs.property___init___doc)
+    public void property___init__(PyObject[] args, String[] keywords) {
+        ArgParser ap = new ArgParser("property", args, keywords,
+                                     new String[] {"fget", "fset", "fdel", "doc"}, 0);
+        fget = ap.getPyObject(0, null);
+        fget = fget == Py.None ? null : fget;
+        fset = ap.getPyObject(1, null);
+        fset = fset == Py.None ? null : fset;
+        fdel = ap.getPyObject(2, null);
+        fdel = fdel == Py.None ? null : fdel;
+        doc = ap.getPyObject(3, null);
+
+        // if no docstring given and the getter has one, use fget's
+        if ((doc == null || doc == Py.None) && fget != null) {
+            PyObject getDoc = fget.__findattr__("__doc__");
+            if (getType() == TYPE) {
+                doc = getDoc;
+            } else {
+                // Put __doc__ in dict of the subclass instance instead, otherwise it gets
+                // shadowed by class's __doc__
+                __setattr__("__doc__", getDoc);
+            }
+            docFromGetter = true;
+        }
     }
 
-    public PyObject getFget() {
-        return fget;
-    }
-    // These methods are to conform to test_descr.py
-    // However I believe that this should be fixed through
-    // PyGetSetDescr.java instead
-    // Carlos Quiroz: 19.11.2005
-    public void setFget(PyObject py) {
-        throw Py.TypeError("readonly attribute");
-    }
-    
-    public void setFset(PyObject py) {
-        throw Py.TypeError("readonly attribute");
-    }
-   
-    public void setFdel(PyObject py) {
-        throw Py.TypeError("readonly attribute");
-    }
-    
-    public void setDoc(PyObject py) {
-        throw Py.TypeError("readonly attribute");
-    }
-
-    public void property_init(PyObject[] args, String[] keywords) {
-        ArgParser argparse = new ArgParser("property",args, keywords,
-                new String[] {"fget","fset","fdel","doc"}, 0);
-        fget = argparse.getPyObject(0, null);
-        fget = fget==Py.None?null:fget;
-        fset = argparse.getPyObject(1, null);
-        fset = fset==Py.None?null:fset;
-        fdel = argparse.getPyObject(2, null);
-        fdel = fdel==Py.None?null:fdel;
-        doc = argparse.getPyObject(3, null);
-    }
-
+    @Override
     public PyObject __call__(PyObject arg1, PyObject args[], String keywords[]) {
         return fget.__call__(arg1);
     }
 
+    @Override
     public PyObject __get__(PyObject obj, PyObject type) {
         return property___get__(obj,type);
     }
 
+    @ExposedMethod(defaults = "null", doc = BuiltinDocs.property___get___doc)
     final PyObject property___get__(PyObject obj, PyObject type) {
-        if (obj == null || null == Py.None)
+        if (obj == null || obj == Py.None) {
             return this;
-        if (fget == null)
+        }
+        if (fget == null) {
             throw Py.AttributeError("unreadable attribute");
+        }
         return fget.__call__(obj);
     }
 
+    @Override
     public void __set__(PyObject obj, PyObject value) {
-        property___set__(obj,value);
+        property___set__(obj, value);
     }
 
+    @ExposedMethod(doc = BuiltinDocs.property___set___doc)
     final void property___set__(PyObject obj, PyObject value) {
-        if (fset == null)
+        if (fset == null) {
             throw Py.AttributeError("can't set attribute");
+        }
         fset.__call__(obj, value);
     }
 
+    @Override
     public void __delete__(PyObject obj) {
         property___delete__(obj);
     }
 
+    @ExposedMethod(doc = BuiltinDocs.property___delete___doc)
     final void property___delete__(PyObject obj) {
-        if (fdel == null)
+        if (fdel == null) {
             throw Py.AttributeError("can't delete attribute");
+        }
         fdel.__call__(obj);
     }
 
+    public PyObject getter(PyObject getter) {
+        return property_getter(getter);
+    }
+
+    @ExposedMethod(doc = BuiltinDocs.property_getter_doc)
+    final PyObject property_getter(PyObject getter) {
+        return propertyCopy(getter, null, null);
+    }
+
+    public PyObject setter(PyObject setter) {
+        return property_setter(setter);
+    }
+
+    @ExposedMethod(doc = BuiltinDocs.property_setter_doc)
+    final PyObject property_setter(PyObject setter) {
+        return propertyCopy(null, setter, null);
+    }
+
+    public PyObject deleter(PyObject deleter) {
+        return property_deleter(deleter);
+    }
+
+    @ExposedMethod(doc = BuiltinDocs.property_deleter_doc)
+    final PyObject property_deleter(PyObject deleter) {
+        return propertyCopy(null, null, deleter);
+    }
+
+    /**
+     * Return a copy of this property with the optional addition of a get/set/del. Helper
+     * method for the getter/setter/deleter methods.
+     */
+    private PyObject propertyCopy(PyObject get, PyObject set, PyObject del) {
+        if (get == null) {
+            get = fget != null ? fget : Py.None;
+        }
+        if (set == null) {
+            set = fset != null ? fset : Py.None;
+        }
+        if (del == null) {
+            del = fdel != null ? fdel : Py.None;
+        }
+
+        PyObject doc;
+        if (docFromGetter) {
+            // make _init use __doc__ from getter
+            doc = Py.None;
+        } else {
+            doc = this.doc != null ? this.doc : Py.None;
+        }
+
+        return getType().__call__(get, set, del, doc);
+    }
 }
